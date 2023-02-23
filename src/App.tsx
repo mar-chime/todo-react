@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import './App.css';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
+import { Amplify, API } from 'aws-amplify';
+
+// import { createTodo, updateTodo, deleteTodo } from './graphql/mutations'
+// import { listTodos } from './graphql/queries'
+
+
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
 
 function App() {
   const [todos, setTodos] = useState<Array<Todo>>([]);
@@ -18,6 +26,16 @@ function App() {
 
   const addTodo: AddTodo = newTodo => {
     if (newTodo !== "") {
+      // const result = API.graphql(
+      //   createTodo({
+      //     input: {
+      //       text: newTodo,
+      //       description: "test",
+      //       complete: false
+      //     }
+      //   })
+      // );
+
       setTodos([...todos, { text: newTodo, complete: false }]);
     }
   };

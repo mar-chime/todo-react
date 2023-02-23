@@ -10,6 +10,11 @@
       "StackName": "amplify-martestamplify-dev-125311",
       "StackId": "arn:aws:cloudformation:us-west-1:626560118522:stack/amplify-martestamplify-dev-125311/fb8242d0-b335-11ed-ae15-0264cbd7a091",
       "AmplifyAppId": "d33jrp8lr1h91h"
+    },
+    "categories": {
+      "api": {
+        "martestamplify": {}
+      }
     }
   }
 }

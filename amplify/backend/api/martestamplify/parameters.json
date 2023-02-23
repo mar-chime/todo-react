@@ -1,5 +1,6 @@
 {
   "AppSyncApiName": "martestamplify",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2023-02-23T07:48:01.223Z"
 }
