@@ -31,24 +31,24 @@ export default function TodoCreateForm(props) {
   const initialValues = {
     name: "",
     description: "",
-    complete: false,
+    completed: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [complete, setComplete] = React.useState(initialValues.complete);
+  const [completed, setCompleted] = React.useState(initialValues.completed);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setDescription(initialValues.description);
-    setComplete(initialValues.complete);
+    setCompleted(initialValues.completed);
     setErrors({});
   };
   const validations = {
     name: [{ type: "Required" }],
     description: [],
-    complete: [],
+    completed: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -77,7 +77,7 @@ export default function TodoCreateForm(props) {
         let modelFields = {
           name,
           description,
-          complete,
+          completed,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -134,7 +134,7 @@ export default function TodoCreateForm(props) {
             const modelFields = {
               name: value,
               description,
-              complete,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -160,7 +160,7 @@ export default function TodoCreateForm(props) {
             const modelFields = {
               name,
               description: value,
-              complete,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -176,30 +176,30 @@ export default function TodoCreateForm(props) {
         {...getOverrideProps(overrides, "description")}
       ></TextField>
       <SwitchField
-        label="Complete"
+        label="Completed"
         defaultChecked={false}
         isDisabled={false}
-        isChecked={complete}
+        isChecked={completed}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
               name,
               description,
-              complete: value,
+              completed: value,
             };
             const result = onChange(modelFields);
-            value = result?.complete ?? value;
+            value = result?.completed ?? value;
           }
-          if (errors.complete?.hasError) {
-            runValidationTasks("complete", value);
+          if (errors.completed?.hasError) {
+            runValidationTasks("completed", value);
           }
-          setComplete(value);
+          setCompleted(value);
         }}
-        onBlur={() => runValidationTasks("complete", complete)}
-        errorMessage={errors.complete?.errorMessage}
-        hasError={errors.complete?.hasError}
-        {...getOverrideProps(overrides, "complete")}
+        onBlur={() => runValidationTasks("completed", completed)}
+        errorMessage={errors.completed?.errorMessage}
+        hasError={errors.completed?.hasError}
+        {...getOverrideProps(overrides, "completed")}
       ></SwitchField>
       <Flex
         justifyContent="space-between"

@@ -32,13 +32,13 @@ export default function TodoUpdateForm(props) {
   const initialValues = {
     name: "",
     description: "",
-    complete: false,
+    completed: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [complete, setComplete] = React.useState(initialValues.complete);
+  const [completed, setCompleted] = React.useState(initialValues.completed);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = todoRecord
@@ -46,7 +46,7 @@ export default function TodoUpdateForm(props) {
       : initialValues;
     setName(cleanValues.name);
     setDescription(cleanValues.description);
-    setComplete(cleanValues.complete);
+    setCompleted(cleanValues.completed);
     setErrors({});
   };
   const [todoRecord, setTodoRecord] = React.useState(todo);
@@ -61,7 +61,7 @@ export default function TodoUpdateForm(props) {
   const validations = {
     name: [{ type: "Required" }],
     description: [],
-    complete: [],
+    completed: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -90,7 +90,7 @@ export default function TodoUpdateForm(props) {
         let modelFields = {
           name,
           description,
-          complete,
+          completed,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -148,7 +148,7 @@ export default function TodoUpdateForm(props) {
             const modelFields = {
               name: value,
               description,
-              complete,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -174,7 +174,7 @@ export default function TodoUpdateForm(props) {
             const modelFields = {
               name,
               description: value,
-              complete,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -190,30 +190,30 @@ export default function TodoUpdateForm(props) {
         {...getOverrideProps(overrides, "description")}
       ></TextField>
       <SwitchField
-        label="Complete"
+        label="Completed"
         defaultChecked={false}
         isDisabled={false}
-        isChecked={complete}
+        isChecked={completed}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
               name,
               description,
-              complete: value,
+              completed: value,
             };
             const result = onChange(modelFields);
-            value = result?.complete ?? value;
+            value = result?.completed ?? value;
           }
-          if (errors.complete?.hasError) {
-            runValidationTasks("complete", value);
+          if (errors.completed?.hasError) {
+            runValidationTasks("completed", value);
           }
-          setComplete(value);
+          setCompleted(value);
         }}
-        onBlur={() => runValidationTasks("complete", complete)}
-        errorMessage={errors.complete?.errorMessage}
-        hasError={errors.complete?.hasError}
-        {...getOverrideProps(overrides, "complete")}
+        onBlur={() => runValidationTasks("completed", completed)}
+        errorMessage={errors.completed?.errorMessage}
+        hasError={errors.completed?.hasError}
+        {...getOverrideProps(overrides, "completed")}
       ></SwitchField>
       <Flex
         justifyContent="space-between"

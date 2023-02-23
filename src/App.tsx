@@ -4,9 +4,10 @@ import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { Amplify, API } from 'aws-amplify';
 
-// import { createTodo, updateTodo, deleteTodo } from './graphql/mutations'
+import { createTodo, updateTodo, deleteTodo } from './graphql/mutations'
 // import { listTodos } from './graphql/queries'
 
+import { createNewTodo } from './API'
 
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
@@ -24,17 +25,21 @@ function App() {
     setTodos(updatedTodos);
   };
 
-  const addTodo: AddTodo = newTodo => {
+  const addTodo: AddTodo = async newTodo => {
     if (newTodo !== "") {
-      // const result = API.graphql(
-      //   createTodo({
-      //     input: {
-      //       text: newTodo,
-      //       description: "test",
-      //       complete: false
-      //     }
-      //   })
-      // );
+
+      const createNewTodo: createNewTodo = {
+        name: newTodo,
+        description: "test",
+        completed: false
+      }
+
+      const result = await API.graphql({
+        query: createTodo,
+        variables: { input: createNewTodo}
+      });
+
+      console.log(result)
 
       setTodos([...todos, { text: newTodo, complete: false }]);
     }

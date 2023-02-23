@@ -1,40 +1,48 @@
-export const createTodo = `
+export const createTodo = /* GraphQL */ `
     mutation createTodo(
         $name: String!
         $description: String
         $completed: Boolean
     ) {
         createTodo(
-            name: $title
+            input: {
+                name: $name
+                description: $description
+                completed: $completed
+            }
         ) {
             id
-            title
+            name
+            description
             completed
         }
     }
 `
 
-export const updateTodo = `
+export const updateTodo = /* GraphQL */ `
     mutation updateTodo(
         $id: ID!
-        $title: String
+        $name: String!
+        $description: String
         $completed: Boolean
     ) {
         updateTodo(
             id: $id
-            title: $title
+            name: $name 
+            description: $description
             completed: $completed
         ) {
             id
-            title
+            name
+            description
             completed
         }
     }
 `
 
-export const deleteTodo = `
+export const deleteTodo = /* GraphQL */ `
     mutation deleteTodo(
-        $id: ID!
+        $id: ID!    
     ) {
         deleteTodo(
             id: $id
