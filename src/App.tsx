@@ -1,24 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
-import { Amplify, API } from 'aws-amplify';
+import { Amplify, API, graphqlOperation } from 'aws-amplify';
+import awsconfig from './aws-exports';
 
 import { createTodo, updateTodo, deleteTodo } from './graphql/mutations'
-// import { listTodos } from './graphql/queries'
+import { listTodos } from './graphql/queries'
 
-import { createNewTodo } from './API'
+import { CreateTodoInput } from './API'
 
-import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
 
 function App() {
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    const allTodos = await API.graphql(graphqlOperation(listTodos)) as any;
+    setTodos(allTodos.data.listTodos.items);
+  }
+    
+
   const toggleComplete: ToggleComplete = selectedTodo => {
     const updatedTodos = todos.map(todo => {
       if (todo === selectedTodo) {
-        return { ...todo, complete: !todo.complete };
+        return { ...todo, complete: !todo.completed };
       }
       return todo;
     });
@@ -27,32 +37,29 @@ function App() {
 
   const addTodo: AddTodo = async newTodo => {
     if (newTodo !== "") {
-
-      const createNewTodo: createNewTodo = {
+      const createNewTodo: CreateTodoInput = {
         name: newTodo,
-        description: "test",
         completed: false
       }
 
-      const result = await API.graphql({
-        query: createTodo,
-        variables: { input: createNewTodo}
-      });
+      const result = await API.graphql(graphqlOperation(createTodo, { input: createNewTodo })) as any;
 
-      console.log(result)
-
-      setTodos([...todos, { text: newTodo, complete: false }]);
+      if (result.data) {
+        setTodos([...todos, result.data.createTodo]);
+      }
     }
   };
 
-  const removeTodo: RemoveTodo = todoToRemove => {
-    let updatedTodos: Array<Todo> = todos.filter(todo => todo.text != todoToRemove.text);
-    setTodos(updatedTodos);
-  }
+  const removeTodo: RemoveTodo = async todoToRemove => {
+    const deleteTodoInput = {
+      id: todoToRemove.id
+    }
 
-  const editTodo: EditTodo = todoToEdit => {
-    let todoToUpdateIndex: number = todos.findIndex(todo => todo.text == todoToEdit.text);
-    console.log(todoToUpdateIndex);
+    const deleteData = await API.graphql(graphqlOperation(deleteTodo, { input: deleteTodoInput })) as any;
+
+    if (deleteData.data) {
+      fetchTodos();
+    }
   }
 
   return (
@@ -63,7 +70,7 @@ function App() {
         </h1>
       </header>
       <TodoForm addTodo={addTodo}/>
-      <TodoList todos={todos} toggleComplete={toggleComplete} onRemoveTodo={removeTodo} editTodo={editTodo}/>
+      <TodoList todos={todos} toggleComplete={toggleComplete} onRemoveTodo={removeTodo}/>
     </div>
   );
 };

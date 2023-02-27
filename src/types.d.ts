@@ -3,8 +3,10 @@ type RemoveTodo = (todoToRemove: Todo) => void;
 type EditTodo = (todoToEdit: Todo) => void;
 
 type Todo = {
-  text: string;
-  complete: boolean;
+  id?: string | null,
+  name: string,
+  description?: string | null,
+  completed?: boolean | null,
 }
 
 type ToggleComplete = (selectedTodo: Todo) => void;
