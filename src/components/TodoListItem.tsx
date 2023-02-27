@@ -24,6 +24,7 @@ export const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete
     <li className={todo.completed? "todo-row completed" : "todo-row"}>
       <label>{todo.name}</label>
       <Dropdown
+        key={todo.id}
         options={dropdownOptions}
       />
     </li>
